@@ -82,7 +82,7 @@ X_test_scaled = preprocessing.StandardScaler().fit_transform(X_test)
 log_regr_best = LogisticRegression(random_state=241, penalty='l2')
 log_regr_best.fit(X_train_scaled, y_train)
 y_predict = log_regr_best.predict_proba(X_test_scaled)[:, 1]
-pd.DataFrame(index=X_test.index, data=y_predict).to_csv('submission.csv')
+pd.DataFrame(index=X_test.index, data=y_predict).to_csv('submission.csv') #0.75480
 print(pd.Series(y_predict).max())
 print(pd.Series(y_predict).min())
 
