@@ -4,6 +4,10 @@ from sklearn.model_selection import KFold
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import cross_val_score
 
+#
+# Подход 1 - код
+#
+
 features = pandas.read_csv('./data/features.csv', index_col='match_id')
 total_count = len(features.index)
 print("have misses:")
@@ -30,3 +34,22 @@ for trees_num in trees_num_arr:
     gbcl.fit(X_train, y_train)
     cv_score = cross_val_score(gbcl, X=X_train, y=y_train, cv=kf, scoring='roc_auc').mean()
     print('#trees:', trees_num, "roc-auc score: ", cv_score, 'Time elapsed:', datetime.datetime.now() - start_time)
+
+#
+# Подход 1 - отчет
+#
+# B: Какие признаки имеют пропуски среди своих значений? Что могут означать пропуски в этих признаках (ответьте на этот вопрос для двух любых признаков)?
+# O: следующе признаки имеют NaN-ы
+
+# объясняется это, по всей видимости, тем,
+# что за первые 5 минут не произошло соответствующего события
+
+# B: Как называется столбец, содержащий целевую переменную?
+# О: radiant_win
+
+# B: Как долго проводилась кросс-валидация для градиентного бустинга с 30 деревьями? Инструкцию по измерению времени можно найти ниже по тексту. Какое качество при этом получилось? Напомним, что в данном задании мы используем метрику качества AUC-ROC.
+# О:
+
+
+# В: Имеет ли смысл использовать больше 30 деревьев в градиентном бустинге? Что бы вы предложили делать, чтобы ускорить его обучение при увеличении количества деревьев?
+# О: 
