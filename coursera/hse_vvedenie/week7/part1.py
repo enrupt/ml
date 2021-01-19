@@ -19,10 +19,8 @@ for column in features.columns:
 features = features.fillna(value=0)
 
 y_train = features['radiant_win']
-X_train = features.drop(['radiant_win', 'tower_status_radiant', 'tower_status_dire',
+X_train = features.drop(['start_time', 'radiant_win', 'tower_status_radiant', 'tower_status_dire',
                    'barracks_status_radiant', 'barracks_status_dire'], axis=1)
-
-features_test = pandas.read_csv('./data/features_test.csv', index_col='match_id')
 
 
 kf = KFold(n_splits=5, shuffle=True,  random_state=42)
@@ -60,5 +58,5 @@ for trees_num in trees_num_arr:
 # О: по динамике роста ROC-AUC можно сказать, что каждое следующее увеличение количества
 # деревьев приносит меньший эффект на значение метрики, вместе с тем растет и время исполнения,
 # так, к примеру при 100 деревьях время исполнения уже 5 мин 33 сек и качество 0.72.
-# Для ускорения работы модно попробовать исключить неважные признаки
+# Для ускорения работы можно попробовать исключить неважные признаки
 # и ограничить предельную глубину дерева.
