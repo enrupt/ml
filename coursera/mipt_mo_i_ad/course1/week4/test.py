@@ -1,4 +1,5 @@
 import numpy as np
+import sklearn.cross_validation
 
 def f(k):
     return pow(3, k) * np.math.exp(-3)/ np.math.factorial(k);
