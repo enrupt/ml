@@ -2,6 +2,7 @@ from matplotlib import pylab as plt
 import numpy as np
 import scipy.linalg as la
 
+from sklearn.metrics import log_loss
 
 def f(x):
     return np.sin(x / 5) * np.exp(x / 10) + 5 * np.exp(-x / 2)
