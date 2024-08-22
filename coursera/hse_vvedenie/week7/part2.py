@@ -5,6 +5,10 @@ from sklearn import preprocessing
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 
+#
+# Подход 2 - код
+#
+
 features = pd.read_csv('./data/features.csv', index_col='match_id')
 features = features.fillna(value=0)
 
@@ -25,9 +29,9 @@ def run_log_regression(X, y):
         print('#penalty_scale:', penalty_scale, "roc-auc score: ", cv_score, 'Time elapsed:', datetime.datetime.now() - start_time)
 
 
-# X_train_scaled = preprocessing.StandardScaler().fit_transform(X_train)
-# print('1. no preprocessing')
-# run_log_regression(X_train_scaled, y_train)
+X_train_scaled = preprocessing.StandardScaler().fit_transform(X_train)
+print('1. no preprocessing')
+run_log_regression(X_train_scaled, y_train)
 
 hero_columns = ['r1_hero', 'r2_hero', 'r3_hero', 'r4_hero', 'r5_hero',
                 'd1_hero', 'd2_hero', 'd3_hero', 'd4_hero', 'd5_hero']
@@ -36,14 +40,14 @@ cat_columns.append('lobby_type')
 
 X_train_no_cat = X_train.drop(cat_columns, axis=1)
 X_train_scaled = preprocessing.StandardScaler().fit_transform(X_train_no_cat)
-# print('2. exclude categories')
-# run_log_regression(X_train_scaled, y_train)
+print('2. exclude categories')
+run_log_regression(X_train_scaled, y_train)
 
-# all_heroes = []
-# for hc in hero_columns:
-#     all_heroes.extend(X_train[hc])
-#
-# distinct_heroes_used = len(pd.Series(all_heroes).unique()) # which is 108
+all_heroes = []
+for hc in hero_columns:
+    all_heroes.extend(X_train[hc])
+
+distinct_heroes_used = len(pd.Series(all_heroes).unique()) # which is 108
 distinct_heroes_count = 113 # see heroes.csv, this is the source of confusion
 hero_id_participation = []
 for i in range(distinct_heroes_count):
@@ -59,8 +63,8 @@ for i, match_id in enumerate(X_train.index):
 #
 X_train_mapped_cat = pd.concat([X_train_no_cat, X_pick], axis=1)
 X_train_scaled = preprocessing.StandardScaler().fit_transform(X_train_mapped_cat)
-# print('3. mapped categories')
-# run_log_regression(X_train_scaled, y_train)
+print('3. mapped categories')
+run_log_regression(X_train_scaled, y_train)
 
 
 features_test = pd.read_csv('./data/features_test.csv', index_col='match_id')
@@ -86,22 +90,38 @@ pd.DataFrame(index=X_test.index, data=y_predict).to_csv('submission.csv') #0.754
 print(pd.Series(y_predict).max())
 print(pd.Series(y_predict).min())
 
-# Какое качество получилось у логистической регрессии над всеми исходными признаками?
+# В: Какое качество получилось у логистической регрессии над всеми исходными признаками?
 # Как оно соотносится с качеством градиентного бустинга? Чем вы можете объяснить эту разницу?
 # Быстрее ли работает логистическая регрессия по сравнению с градиентным бустингом?
 
-# #penalty_scale: 1 roc-auc score:  0.7191894167083216 Time elapsed: 0:00:03.710110
 
-# Как влияет на качество логистической регрессии удаление категориальных признаков (укажите новое значение метрики качества)?
+# О: Качество логистической регрессии выше, чем у градиентного бустинга и работает она быстрее.
+# Скорость и простота по всей видимости связаны с природой задачи бинрарной классификации
+# roc-auc score 0.719 Time elapsed: 0:00:03.710110
+
+
+# В: Как влияет на качество логистической регрессии удаление категориальных признаков (укажите новое значение метрики качества)?
 # Чем вы можете объяснить это изменение?
 
-# Сколько различных идентификаторов героев существует в данной игре?
-# 113
 
-# Какое получилось качество при добавлении "мешка слов" по героям?
+# О: Удаление признаков не влияет на качество классификации.
+# Связано это может быть с тем, что некорректно кодированные категориальные признаки не
+# рассматриваются значимыми
+
+
+# В: Сколько различных идентификаторов героев существует в данной игре?
+
+# О: 113
+
+
+# В: Какое получилось качество при добавлении "мешка слов" по героям?
 # Улучшилось ли оно по сравнению с предыдущим вариантом? Чем вы можете это объяснить?
-# 0.754 Time elapsed: 0:00:08.18
 
-# Какое минимальное и максимальное значение прогноза на тестовой выборке получилось у лучшего из алгоритмов?
-# 0.9966521921146925
-# 0.008615583197616324
+# О: Качество улучшилось и составило 0.754, объяснить это можно тем,
+# что победа в значительной степени зависит от силы участвующих георев
+
+
+# В:  Какое минимальное и максимальное значение прогноза на тестовой выборке
+# получилось у лучшего из алгоритмов?
+
+# О: 0.997 и 0.0086 соответсвенно
