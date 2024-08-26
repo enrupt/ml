@@ -53,4 +53,4 @@ for rate in rate_arr:
 
 regr = RandomForestClassifier(n_estimators=36, random_state=241)
 regr.fit(X_train, y_train)
-print( log_loss(y_test, regr.predict_proba(X_test)) )
+print( accuracy_score(y_test, regr.predict_proba(X_test)) )

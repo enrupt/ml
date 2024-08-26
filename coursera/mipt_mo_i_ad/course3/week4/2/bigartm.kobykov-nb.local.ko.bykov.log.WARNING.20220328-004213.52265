@@ -1,0 +1,6 @@
+Log file created at: 2022/03/28 00:42:13
+Running on machine: kobykov-nb.local
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W0328 00:42:13.484905 121607680 check_messages.h:1121] Inconsistent fields size in ThetaMatrix: 1728 vs 0 vs 1728 vs 0;
+W0328 01:24:56.191200 121607680 check_messages.h:1121] Inconsistent fields size in ThetaMatrix: 1728 vs 0 vs 1728 vs 0;
+W0328 01:54:13.444314 121607680 check_messages.h:1121] Inconsistent fields size in ThetaMatrix: 1728 vs 0 vs 1728 vs 0;
